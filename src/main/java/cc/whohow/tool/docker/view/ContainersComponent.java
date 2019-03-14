@@ -1,6 +1,6 @@
 package cc.whohow.tool.docker.view;
 
-import cc.whohow.tool.json.JsonCellValueFactory;
+import cc.whohow.tool.vue.JsonCellValueFactory;
 import cc.whohow.tool.xml.Xml;
 import com.fasterxml.jackson.databind.JsonNode;
 import javafx.collections.FXCollections;

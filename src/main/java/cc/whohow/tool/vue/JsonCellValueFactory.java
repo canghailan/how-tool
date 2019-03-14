@@ -1,6 +1,6 @@
-package cc.whohow.tool.json;
+package cc.whohow.tool.vue;
 
-import com.fasterxml.jackson.core.JsonPointer;
+import cc.whohow.tool.json.Json;
 import com.fasterxml.jackson.databind.JsonNode;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -8,10 +8,10 @@ import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 
 public class JsonCellValueFactory implements Callback<TableColumn.CellDataFeatures<JsonNode, JsonNode>, ObservableValue<JsonNode>> {
-    private final JsonPointer pointer;
+    private final String expression;
 
-    public JsonCellValueFactory(String pointer) {
-        this.pointer = JsonPointer.compile(pointer);
+    public JsonCellValueFactory(String expression) {
+        this.expression = expression;
     }
 
     @Override
@@ -20,6 +20,6 @@ public class JsonCellValueFactory implements Callback<TableColumn.CellDataFeatur
         if (row == null || row.isNull() || row.isMissingNode()) {
             return null;
         }
-        return new ReadOnlyObjectWrapper<>(row.at(pointer));
+        return new ReadOnlyObjectWrapper<>(Json.evaluate(row, expression));
     }
 }

@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
@@ -35,5 +36,11 @@ public class Xml {
     @SneakyThrows
     public static XPathExpression compile(String expression) {
         return X_PATH_FACTORY.newXPath().compile(expression);
+    }
+
+    @SneakyThrows
+    @SuppressWarnings("unchecked")
+    public static <T> T evaluate(Object item, String expression, QName returnType) {
+        return (T) compile(expression).evaluate(item, returnType);
     }
 }
