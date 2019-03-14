@@ -1,34 +1,46 @@
 package cc.whohow.tool;
 
+import cc.whohow.tool.docker.view.ContainersComponent;
+import cc.whohow.tool.json.Json;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DockerClientConfig;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
 @Log4j2
-public class App  extends Application {
+public class App extends Application {
     private ScriptEngine javascriptEngine = new ScriptEngineManager().getEngineByName("javascript");
+
+    public static void main(String[] args) {
+        launch();
+    }
 
     @Override
     @SneakyThrows
     public void start(Stage stage) {
-        log.debug("{}", javascriptEngine.eval("1+1"));
-        String javaVersion = System.getProperty("java.version");
-        String javafxVersion = System.getProperty("javafx.version");
-        Label l = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        Scene scene = new Scene(new StackPane(l), 640, 480);
+        DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
+                .withDockerHost("")
+                .withDockerTlsVerify(true)
+                .withDockerCertPath("private")
+                .build();
+        DockerClient docker = DockerClientBuilder.getInstance(config).build();
+
+        JsonNode containers = Json.from(docker.listContainersCmd().exec());
+        ObjectNode data = Json.newObject();
+        data.set("containers", containers);
+
+        Scene scene = new ContainersComponent().apply(data);
         stage.setScene(scene);
         stage.show();
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }
