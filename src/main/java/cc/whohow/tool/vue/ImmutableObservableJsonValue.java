@@ -19,6 +19,7 @@ import java.math.BigInteger;
 import java.util.*;
 import java.util.function.Consumer;
 
+@SuppressWarnings("all")
 public class ImmutableObservableJsonValue extends JsonNode implements ObservableValue<JsonNode>, ObservableList<JsonNode> {
     private final JsonNode json;
 

@@ -1,6 +1,7 @@
-package cc.whohow.tool.vue;
+package cc.whohow.tool.vue.component;
 
 import cc.whohow.tool.json.Json;
+import cc.whohow.tool.vue.ImmutableObservableJsonValue;
 import com.fasterxml.jackson.databind.JsonNode;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn;

@@ -1,7 +1,9 @@
 package cc.whohow.tool;
 
-import cc.whohow.tool.docker.view.ContainersComponent;
+import cc.whohow.tool.docker.view.DockerComponent;
 import cc.whohow.tool.json.Json;
+import cc.whohow.tool.vue.Component;
+import cc.whohow.tool.xml.Xml;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.DockerClient;
@@ -9,19 +11,14 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+import org.w3c.dom.Document;
 
 @Log4j2
 public class App extends Application {
-    private ScriptEngine javascriptEngine = new ScriptEngineManager().getEngineByName("javascript");
-
     public static void main(String[] args) {
         launch();
     }
@@ -29,19 +26,15 @@ public class App extends Application {
     @Override
     @SneakyThrows
     public void start(Stage stage) {
-        DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-                .withDockerHost("tcp://master1g10.cs-cn-hangzhou.aliyun.com:20034")
-                .withDockerTlsVerify(true)
-                .withDockerCertPath("private")
-                .build();
-        DockerClient docker = DockerClientBuilder.getInstance(config).build();
+        Document dom = Xml.load("cc/whohow/tool/docker/view/Containers.xml");
+        DockerComponent dockerComponent = new DockerComponent(dom, Json.newObject());
 
-        JsonNode containers = Json.from(docker.listContainersCmd().exec());
-        ObjectNode data = Json.newObject();
-        data.set("containers", containers);
 
-        Parent component = new ContainersComponent().apply(data);
-        stage.setScene(new Scene(component));
+
+        Component component = new Component(dom, data);
+        Scene scene = component.get();
+
+        stage.setScene(component.get());
         stage.show();
     }
 }

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <app>
-    <TableView :data="containers">
-        <TableColumn label="ID" value="Id"/>
-        <TableColumn label="Image" value="Image"/>
-    </TableView>
+    <template>
+        <TableView :data="containers">
+            <TableColumn label="ID" value="Id"/>
+            <TableColumn label="Image" value="Image"/>
+        </TableView>
+    </template>
 </app>
