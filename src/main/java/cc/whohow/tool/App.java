@@ -9,6 +9,7 @@ import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
 import javafx.application.Application;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
@@ -29,7 +30,7 @@ public class App extends Application {
     @SneakyThrows
     public void start(Stage stage) {
         DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder()
-                .withDockerHost("")
+                .withDockerHost("tcp://master1g10.cs-cn-hangzhou.aliyun.com:20034")
                 .withDockerTlsVerify(true)
                 .withDockerCertPath("private")
                 .build();
@@ -39,8 +40,8 @@ public class App extends Application {
         ObjectNode data = Json.newObject();
         data.set("containers", containers);
 
-        Scene scene = new ContainersComponent().apply(data);
-        stage.setScene(scene);
+        Parent component = new ContainersComponent().apply(data);
+        stage.setScene(new Scene(component));
         stage.show();
     }
 }

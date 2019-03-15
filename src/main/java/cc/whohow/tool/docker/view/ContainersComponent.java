@@ -1,10 +1,10 @@
 package cc.whohow.tool.docker.view;
 
+import cc.whohow.tool.vue.ImmutableObservableJsonValue;
 import cc.whohow.tool.vue.JsonCellValueFactory;
 import cc.whohow.tool.xml.Xml;
 import com.fasterxml.jackson.databind.JsonNode;
-import javafx.collections.FXCollections;
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import lombok.SneakyThrows;
@@ -14,16 +14,14 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
-public class ContainersComponent implements Function<JsonNode, Scene> {
+public class ContainersComponent implements Function<JsonNode, Parent> {
     private Document dom = Xml.load("cc/whohow/tool/docker/view/Containers.xml");
 
     @Override
     @SneakyThrows
-    public Scene apply(JsonNode data) {
+    public Parent apply(JsonNode data) {
         TableView tableView = new TableView<JsonNode>();
 
         XPathExpression tableViewSelector = Xml.compile("/app/TableView");
@@ -40,10 +38,8 @@ public class ContainersComponent implements Function<JsonNode, Scene> {
         }
 
         JsonNode tableData = data.path(tableNode.getAttribute(":data"));
-        List<JsonNode> list = new ArrayList<>();
-        tableData.forEach(list::add);
-        tableView.setItems(FXCollections.observableList(list));
+        tableView.setItems(new ImmutableObservableJsonValue(tableData));
 
-        return new Scene(tableView);
+        return tableView;
     }
 }
