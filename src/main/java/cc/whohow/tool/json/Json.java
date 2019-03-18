@@ -3,7 +3,6 @@ package cc.whohow.tool.json;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.MissingNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.SneakyThrows;
@@ -33,14 +32,11 @@ public class Json {
         return OBJECT_MAPPER.valueToTree(json);
     }
 
+    public static JsonExpression compile(String expression) {
+        return new SimpleJsonExpression(expression);
+    }
+
     public static JsonNode evaluate(JsonNode json, String expression) {
-        if (json == null || json.isNull() || json.isMissingNode() ||
-                expression == null || expression.isEmpty()) {
-            return MissingNode.getInstance();
-        }
-        if (expression.startsWith("/")) {
-            return json.at(expression);
-        }
-        return json.path(expression);
+        return compile(expression).evaluate(json);
     }
 }

@@ -2,21 +2,30 @@ package cc.whohow.tool.vue;
 
 import cc.whohow.tool.vue.component.TableViewComponent;
 import javafx.scene.Parent;
-import org.w3c.dom.Element;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class Components implements Function<String, BiFunction<Element, Component, Parent>> {
+public class Components implements Function<String, Component<? extends Parent>> {
+    private static final Map<String, Supplier<? extends Component<? extends Parent>>> DEFAULT_COMPONENTS = defaultComponents();
     private static final Components DEFAULT = new Components();
-    private static final Map<String, BiFunction<Element, Component, Parent>> DEFAULT_COMPONENTS = defaultComponents();
+    private final Map<String, Supplier<? extends Component<? extends Parent>>> components;
 
-    private static Map<String, BiFunction<Element, Component, Parent>> defaultComponents() {
-        Map<String, BiFunction<Element, Component, Parent>> components = new HashMap<>();
-        components.put("TableView", new TableViewComponent());
+    private Components() {
+        this.components = DEFAULT_COMPONENTS;
+    }
+
+    public Components(Map<String, Supplier<? extends Component<? extends Parent>>> components) {
+        this.components = new HashMap<>(DEFAULT_COMPONENTS);
+        this.components.putAll(components);
+    }
+
+    private static Map<String, Supplier<? extends Component<? extends Parent>>> defaultComponents() {
+        Map<String, Supplier<? extends Component<? extends Parent>>> components = new HashMap<>();
+        components.put("TableView", TableViewComponent::new);
         return Collections.unmodifiableMap(components);
     }
 
@@ -24,19 +33,8 @@ public class Components implements Function<String, BiFunction<Element, Componen
         return DEFAULT;
     }
 
-    private final Map<String, BiFunction<Element, Component, Parent>> components;
-
-    private Components() {
-        this.components = DEFAULT_COMPONENTS;
-    }
-
-    public Components(Map<String, BiFunction<Element, Component, Parent>> components) {
-        this.components = new HashMap<>(DEFAULT_COMPONENTS);
-        this.components.putAll(components);
-    }
-
     @Override
-    public BiFunction<Element, Component, Parent> apply(String name) {
-        return components.get(name);
+    public Component<?> apply(String name) {
+        return components.get(name).get();
     }
 }

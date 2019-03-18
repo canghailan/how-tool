@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <app>
     <template>
-        <TableView :data="containers">
-            <TableColumn label="ID" value="Id"/>
-            <TableColumn label="Image" value="Image"/>
+        <TableView :items="containers">
+            <TableColumn text="ID" cellValue="Id"/>
+            <TableColumn text="Image" cellValue="Image"/>
+            <TableColumn text="Created" cellValue="Created"/>
+            <TableColumn text="State" cellValue="State"/>
+            <TableColumn text="Status" cellValue="Status"/>
         </TableView>
     </template>
 </app>

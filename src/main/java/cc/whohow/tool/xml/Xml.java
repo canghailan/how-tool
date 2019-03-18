@@ -25,7 +25,7 @@ public class Xml {
         return BUILDER_FACTORY.newDocumentBuilder().parse(new InputSource(url.openStream()));
     }
 
-    public static Document load(String classpath) {
+    public static Document loadClasspath(String classpath) {
         URL url = Thread.currentThread().getContextClassLoader().getResource(classpath);
         if (url == null) {
             throw new IllegalArgumentException(classpath);

@@ -1,22 +1,31 @@
 package cc.whohow.tool.docker.view;
 
-import cc.whohow.tool.vue.Component;
-import com.fasterxml.jackson.databind.JsonNode;
+import cc.whohow.tool.vue.CustomComponent;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
-import org.w3c.dom.Document;
+import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 
-public class DockerComponent extends Component {
-    private DockerClient docker;
+public class DockerComponent extends CustomComponent {
+    protected DockerClient docker;
 
-    public DockerComponent(Document vue, JsonNode data) {
-        super(vue, data);
-        this.docker = DockerClientBuilder.getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder()
-                .withDockerHost("tcp://master1g10.cs-cn-hangzhou.aliyun.com:20034")
-                .withDockerTlsVerify(true)
-                .withDockerCertPath("private")
-                .build()).build();
+    public DockerComponent(String dom) {
+        super(dom);
+    }
+
+    @Override
+    public void setValue(ObjectNode value) {
+        if (docker == null) {
+            docker = DockerClientBuilder.getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder()
+                    .withDockerHost("tcp://")
+                    .withDockerTlsVerify(true)
+                    .withDockerCertPath("private")
+                    .build())
+                    .withDockerCmdExecFactory(new NettyDockerCmdExecFactory())
+                    .build();
+        }
+        super.setValue(value);
     }
 
     @Override
