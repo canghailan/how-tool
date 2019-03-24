@@ -1,4 +1,4 @@
-package cc.whohow.tool.docker.vm;
+package cc.whohow.tool.docker.view;
 
 import cc.whohow.tool.app.engine.AbstractViewModel;
 import cc.whohow.tool.json.Json;

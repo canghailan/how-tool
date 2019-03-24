@@ -7,12 +7,14 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Parent;
 import javafx.stage.WindowEvent;
+import lombok.extern.log4j.Log4j2;
 import org.w3c.dom.Element;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@Log4j2
 public abstract class AbstractViewModel<V extends Parent> implements ViewModel<V> {
     protected Component<V> component;
     protected Element node;
@@ -39,6 +41,7 @@ public abstract class AbstractViewModel<V extends Parent> implements ViewModel<V
 
     @Override
     public CompletableFuture<JsonNode> get(String expression) {
+        log.debug("get {}", expression);
         return CompletableFuture.completedFuture(Json.evaluate(model, expression));
     }
 
@@ -81,6 +84,7 @@ public abstract class AbstractViewModel<V extends Parent> implements ViewModel<V
     public void setValue(ObjectNode model) {
         this.model = model;
         this.view = null;
+        log.debug("setValue {}", model);
     }
 
     @Override
@@ -90,7 +94,7 @@ public abstract class AbstractViewModel<V extends Parent> implements ViewModel<V
 
     @Override
     public void close() throws Exception {
-
+        log.debug("close {}", this);
     }
 
     @Override
