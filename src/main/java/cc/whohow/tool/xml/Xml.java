@@ -1,19 +1,26 @@
 package cc.whohow.tool.xml;
 
 import lombok.SneakyThrows;
+import org.apache.logging.log4j.core.jackson.XmlConstants;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Xml {
     private static final DocumentBuilderFactory BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
     private static final XPathFactory X_PATH_FACTORY = XPathFactory.newInstance();
+    private static final Map<String, XPathExpression> CACHE = new ConcurrentHashMap<>();
 
     @SneakyThrows
     public static Document parse(String xml) {
@@ -40,7 +47,13 @@ public class Xml {
 
     @SneakyThrows
     @SuppressWarnings("unchecked")
-    public static <T> T evaluate(Object item, String expression, QName returnType) {
-        return (T) compile(expression).evaluate(item, returnType);
+    public static <T extends Node> T querySelector(Object item, String expression) {
+        return (T) CACHE.computeIfAbsent(expression, Xml::compile).evaluate(item, XPathConstants.NODE);
+    }
+
+    @SneakyThrows
+    @SuppressWarnings("unchecked")
+    public static <T extends NodeList> T querySelectorAll(Object item, String expression) {
+        return (T) CACHE.computeIfAbsent(expression, Xml::compile).evaluate(item, XPathConstants.NODESET);
     }
 }

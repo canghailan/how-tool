@@ -1,4 +1,4 @@
-package cc.whohow.tool.vue;
+package cc.whohow.tool.engine;
 
 import cc.whohow.tool.xml.Xml;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -11,9 +11,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 
 public class CustomComponent extends AbstractComponent<Parent> {
-    protected static final XPathExpression ROOT = Xml.compile("/*/template/*");
-    protected static final XPathExpression STYLE = Xml.compile("/*/style");
-
     protected Components components;
     protected Element rootComponent;
 
@@ -29,7 +26,7 @@ public class CustomComponent extends AbstractComponent<Parent> {
     @SneakyThrows
     public CustomComponent(Document vue, Components components) {
         this.components = components;
-        this.rootComponent = (Element) ROOT.evaluate(vue, XPathConstants.NODE);
+        this.rootComponent = Xml.querySelector(vue, "/*/template/*");
     }
 
     @Override

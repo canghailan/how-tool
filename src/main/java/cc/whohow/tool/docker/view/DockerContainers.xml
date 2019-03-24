@@ -7,6 +7,12 @@
             <TableColumn text="Created" cellValue="Created"/>
             <TableColumn text="State" cellValue="State"/>
             <TableColumn text="Status" cellValue="Status"/>
+            <TableColumn text="Action">
+                <Group>
+                    <Button text="打开" />
+                    <Button text="关闭" />
+                </Group>
+            </TableColumn>
         </TableView>
     </template>
 </app>

@@ -2,9 +2,9 @@ package cc.whohow.tool.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import lombok.SneakyThrows;
 
 import java.io.InputStream;
@@ -14,15 +14,14 @@ import java.io.Writer;
 import java.net.URL;
 import java.nio.ByteBuffer;
 
-public class Json {
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+public class Yaml {
+    private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
 
-    public static ArrayNode newArray() {
-        return OBJECT_MAPPER.createArrayNode();
-    }
-
-    public static ObjectNode newObject() {
-        return OBJECT_MAPPER.createObjectNode();
+    private static ObjectMapper buildObjectMapper() {
+        YAMLFactory yamlFactory = new YAMLFactory();
+        yamlFactory.configure(YAMLGenerator.Feature.WRITE_DOC_START_MARKER, false);
+        yamlFactory.configure(YAMLGenerator.Feature.MINIMIZE_QUOTES, true);
+        return new ObjectMapper(yamlFactory);
     }
 
     @SneakyThrows
@@ -36,13 +35,13 @@ public class Json {
     }
 
     @SneakyThrows
-    public static JsonNode parse(Reader reader) {
-        return OBJECT_MAPPER.readTree(reader);
+    public static JsonNode parse(InputStream stream) {
+        return OBJECT_MAPPER.readTree(stream);
     }
 
     @SneakyThrows
-    public static JsonNode parse(InputStream stream) {
-        return OBJECT_MAPPER.readTree(stream);
+    public static JsonNode parse(Reader reader) {
+        return OBJECT_MAPPER.readTree(reader);
     }
 
     @SneakyThrows
@@ -63,17 +62,5 @@ public class Json {
     @SneakyThrows
     public static void stringify(Object json, OutputStream stream) {
         OBJECT_MAPPER.writeValue(stream, json);
-    }
-
-    public static JsonNode from(Object json) {
-        return OBJECT_MAPPER.valueToTree(json);
-    }
-
-    public static JsonExpression compile(String expression) {
-        return new SimpleJsonExpression(expression);
-    }
-
-    public static JsonNode evaluate(JsonNode json, String expression) {
-        return compile(expression).evaluate(json);
     }
 }

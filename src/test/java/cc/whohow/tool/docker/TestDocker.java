@@ -41,21 +41,21 @@ public class TestDocker {
     @Test
     @SneakyThrows
     public void test() {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(() -> {
-            String id = docker.execCreateCmd("")
-                    .withAttachStdin(true)
-                    .withAttachStderr(true)
-                    .withAttachStdout(true)
-                    .withCmd("sh")
-                    .withTty(true)
-                    .exec().getId();
-            docker.execStartCmd(id)
-                    .withStdIn(System.in)
+//        ExecutorService executor = Executors.newSingleThreadExecutor();
+//        executor.submit(() -> {
+//            String id = docker.execCreateCmd("")
+//                    .withAttachStdin(true)
+//                    .withAttachStderr(true)
+//                    .withAttachStdout(true)
+//                    .withCmd("sh")
+//                    .withTty(true)
+//                    .exec().getId();
+//            docker.execStartCmd(id)
+//                    .withStdIn(System.in)
 //                .withTty(true)
 //                .withDetach(false)
-                    .exec(new ExecStartResultCallback(System.out, System.err))
-                    .awaitCompletion();
-        });
+//                    .exec(new ExecStartResultCallback(System.out, System.err))
+//                    .awaitCompletion();
+//        });
     }
 }

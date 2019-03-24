@@ -1,4 +1,4 @@
-package cc.whohow.tool.vue;
+package cc.whohow.tool.engine;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import javafx.beans.InvalidationListener;
@@ -7,11 +7,13 @@ import javafx.scene.Parent;
 import org.w3c.dom.Element;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 public abstract class AbstractComponent<V extends Parent> implements Component<V> {
     protected Element element;
     protected ObjectNode data;
     protected CompletableFuture<V> view;
+    protected Function<String, Component<? extends Parent>> componentFactory = Components.getDefault();
 
     @Override
     public void close() throws Exception {
@@ -52,5 +54,15 @@ public abstract class AbstractComponent<V extends Parent> implements Component<V
     public void setValue(ObjectNode value) {
         this.data = value;
         this.view = CompletableFuture.completedFuture(apply(element, data));
+    }
+
+    @Override
+    public void setComponentFactory(Function<String, Component<? extends Parent>> componentFactory) {
+        this.componentFactory = componentFactory;
+    }
+
+    @Override
+    public Function<String, Component<? extends Parent>> getComponentFactory() {
+        return componentFactory;
     }
 }

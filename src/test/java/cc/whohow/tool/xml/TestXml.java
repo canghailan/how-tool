@@ -13,7 +13,7 @@ public class TestXml {
     @Test
     @SneakyThrows
     public void test() {
-        Document dom = Xml.loadClasspath("cc/whohow/tool/docker/view/Containers.xml");
+        Document dom = Xml.loadClasspath("cc/whohow/tool/docker/view/DockerContainers.xml");
         XPathExpression selector = Xml.compile("/app/TableView/TableColumn");
         NodeList nodeList = (NodeList) selector.evaluate(dom, XPathConstants.NODESET);
         for (int i = 0; i < nodeList.getLength(); i++) {

@@ -7,9 +7,9 @@ import lombok.extern.log4j.Log4j2;
 import org.w3c.dom.Element;
 
 @Log4j2
-public class DockerContainerComponent extends DockerComponent {
-    public DockerContainerComponent() {
-        super("cc/whohow/tool/docker/view/Containers.xml");
+public class DockerContainersView extends DockerComponent {
+    public DockerContainersView() {
+        super("cc/whohow/tool/docker/view/DockerContainers.xml");
     }
 
     @Override

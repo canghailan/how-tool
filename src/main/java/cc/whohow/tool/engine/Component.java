@@ -1,4 +1,4 @@
-package cc.whohow.tool.vue;
+package cc.whohow.tool.engine;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import javafx.beans.value.ObservableValue;
@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import org.w3c.dom.Element;
 
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface Component<V extends Parent> extends
@@ -15,5 +16,6 @@ public interface Component<V extends Parent> extends
         Supplier<V>,
         BiFunction<Element, ObjectNode, V>,
         AutoCloseable {
-
+    void setComponentFactory(Function<String, Component<? extends Parent>> componentFactory);
+    Function<String, Component<? extends Parent>> getComponentFactory();
 }
