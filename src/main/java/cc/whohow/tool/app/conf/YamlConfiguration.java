@@ -1,4 +1,4 @@
-package cc.whohow.tool.conf;
+package cc.whohow.tool.app.conf;
 
 import cc.whohow.tool.json.Yaml;
 import com.fasterxml.jackson.databind.node.ObjectNode;

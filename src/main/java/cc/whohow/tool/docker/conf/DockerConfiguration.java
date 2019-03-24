@@ -1,6 +1,6 @@
 package cc.whohow.tool.docker.conf;
 
-import cc.whohow.tool.conf.YamlConfiguration;
+import cc.whohow.tool.app.conf.YamlConfiguration;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.nio.file.Paths;

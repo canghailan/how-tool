@@ -1,6 +1,6 @@
-package cc.whohow.tool.conf;
+package cc.whohow.tool.app.conf;
 
-import cc.whohow.tool.engine.ViewModel;
+import cc.whohow.tool.app.engine.ViewModel;
 
 public interface ConfigurationHandler {
     String getType();

@@ -1,4 +1,4 @@
-package cc.whohow.tool.conf;
+package cc.whohow.tool.app.conf;
 
 import cc.whohow.tool.docker.conf.DockerConfiguration;
 import org.junit.Test;

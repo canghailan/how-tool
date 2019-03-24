@@ -1,4 +1,4 @@
-package cc.whohow.tool.conf;
+package cc.whohow.tool.app.conf;
 
 import java.util.Arrays;
 import java.util.HashMap;

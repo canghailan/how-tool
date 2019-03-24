@@ -1,7 +1,7 @@
-package cc.whohow.tool.engine.component;
+package cc.whohow.tool.app.engine.component;
 
-import cc.whohow.tool.engine.AbstractComponent;
-import cc.whohow.tool.engine.ViewModel;
+import cc.whohow.tool.app.engine.AbstractComponent;
+import cc.whohow.tool.app.engine.ViewModel;
 import javafx.scene.control.Button;
 import org.w3c.dom.Element;
 
