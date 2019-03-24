@@ -1,8 +1,8 @@
 package cc.whohow.tool.app.engine.component;
 
 import cc.whohow.tool.app.engine.Component;
-import cc.whohow.tool.app.engine.ViewModel;
 import cc.whohow.tool.app.engine.ImmutableObservableValue;
+import cc.whohow.tool.app.engine.ViewModel;
 import com.fasterxml.jackson.databind.JsonNode;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;

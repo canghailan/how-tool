@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class SimpleViewModel<V extends Parent> implements ViewModel<V> {
+public abstract class AbstractViewModel<V extends Parent> implements ViewModel<V> {
     protected Component<V> component;
     protected Element node;
     protected ObjectNode model;

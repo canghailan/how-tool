@@ -7,8 +7,11 @@ import org.w3c.dom.Attr;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BindingAttr implements Map.Entry<String, String> {
+    private static final Pattern ATTR = Pattern.compile("(?<prefix>.*[:@])(?<key>[^:@].*)");
     private Attr attr;
     private ViewModel<?> vm;
     private String prefix;
@@ -18,14 +21,13 @@ public class BindingAttr implements Map.Entry<String, String> {
     public BindingAttr(Attr attr, ViewModel<?> vm) {
         this.attr = attr;
         this.vm = vm;
-        String name = attr.getName();
-        int index = name.indexOf(':');
-        if (index < 0) {
-            prefix = null;
-            bindingKey = name;
+        Matcher matcher = ATTR.matcher(attr.getName());
+        if (matcher.matches()) {
+            prefix = matcher.group("prefix");
+            bindingKey = matcher.group("key");
         } else {
-            prefix = name.substring(0, index + 1);
-            bindingKey = name.substring(index + 1);
+            prefix = null;
+            bindingKey = attr.getName();
         }
     }
 

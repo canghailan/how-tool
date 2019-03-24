@@ -2,9 +2,9 @@ package cc.whohow.tool;
 
 import cc.whohow.tool.app.conf.ConfigurationHandler;
 import cc.whohow.tool.app.conf.ConfigurationHandlerFactory;
-import cc.whohow.tool.docker.conf.DockerConfigurationHandler;
 import cc.whohow.tool.app.engine.CloseRunnable;
 import cc.whohow.tool.app.engine.ViewModel;
+import cc.whohow.tool.docker.conf.DockerConfigurationHandler;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;

@@ -1,6 +1,6 @@
 package cc.whohow.tool.docker.vm;
 
-import cc.whohow.tool.app.engine.SimpleViewModel;
+import cc.whohow.tool.app.engine.AbstractViewModel;
 import cc.whohow.tool.json.Json;
 import cc.whohow.tool.time.DateTime;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,7 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import java.util.concurrent.CompletableFuture;
 
 @Log4j2
-public class DockerViewModel extends SimpleViewModel<Parent> {
+public class DockerViewModel extends AbstractViewModel<Parent> {
     protected DockerClient docker;
 
     @Override

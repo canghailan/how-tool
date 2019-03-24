@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ConfigurationHandlerFactory implements Function<String, ConfigurationHandler> {
-    private static final Pattern PATTERN = Pattern.compile(".+\\.(?<type>[a-zA-Z0-9-_]+)\\.hot");
+    private static final Pattern PATTERN = Pattern.compile(".+\\.(?<type>[a-zA-Z0-9-_]+)");
     private Map<String, ConfigurationHandler> configurationHandlers = new HashMap<>();
 
     public ConfigurationHandlerFactory(ConfigurationHandler... configurationHandlers) {
@@ -23,7 +23,12 @@ public class ConfigurationHandlerFactory implements Function<String, Configurati
 
     @Override
     public ConfigurationHandler apply(String uri) {
-        Matcher matcher = PATTERN.matcher(uri);
+        Matcher matcher;
+        if (uri.endsWith(".hot")) {
+            matcher = PATTERN.matcher(uri.subSequence(0, uri.length() - 4));
+        } else {
+            matcher = PATTERN.matcher(uri);
+        }
         if (matcher.matches()) {
             return configurationHandlers.get(matcher.group("type"));
         }

@@ -14,9 +14,12 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Json {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final Map<String, JsonExpression> CACHE = new ConcurrentHashMap<>();
 
     public static ArrayNode newArray() {
         return OBJECT_MAPPER.createArrayNode();
@@ -79,6 +82,6 @@ public class Json {
     }
 
     public static JsonNode evaluate(JsonNode json, String expression) {
-        return compile(expression).evaluate(json);
+        return CACHE.computeIfAbsent(expression, Json::compile).evaluate(json);
     }
 }
