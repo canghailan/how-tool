@@ -18,6 +18,8 @@ public class CustomComponent extends AbstractComponent<Parent> {
 
     @Override
     public Parent apply(Element element, ViewModel vm) {
-        return getComponentFactory().apply(root.getTagName()).apply(root, vm);
+        Component<?> component = componentFactory.apply(root.getTagName());
+        component.setComponentFactory(getComponentFactory());
+        return component.apply(root, vm);
     }
 }

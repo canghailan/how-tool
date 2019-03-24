@@ -1,9 +1,7 @@
 package cc.whohow.tool.engine.component;
 
-import cc.whohow.tool.engine.AbstractComponent;
-import cc.whohow.tool.engine.Component;
-import cc.whohow.tool.engine.ImmutableObservableJsonValue;
-import cc.whohow.tool.engine.ViewModel;
+import cc.whohow.tool.engine.*;
+import cc.whohow.tool.xml.Elements;
 import cc.whohow.tool.xml.Xml;
 import com.fasterxml.jackson.databind.JsonNode;
 import javafx.scene.Node;
@@ -11,7 +9,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 public class TableViewComponent extends AbstractComponent<TableView<JsonNode>> {
     protected TableView<JsonNode> tableView;
@@ -20,25 +17,47 @@ public class TableViewComponent extends AbstractComponent<TableView<JsonNode>> {
     public TableView<JsonNode> apply(Element element, ViewModel<?> vm) {
         if (tableView == null) {
             tableView = new TableView<>();
-            NodeList tableColumnNodeList = Xml.querySelectorAll(element, "TableColumn");
-            for (int i = 0; i < tableColumnNodeList.getLength(); i++) {
-                Element tableColumn = (Element) tableColumnNodeList.item(i);
+            for (Element tableColumn : new Elements(Xml.querySelectorAll(element, "TableColumn"))) {
                 tableView.getColumns().add(applyTableColumn(tableColumn, vm));
             }
-            tableView.setTableMenuButtonVisible(
-                    vm.get("tableMenuButtonVisible").join().asBoolean(true));
-            tableView.setEditable(
-                    vm.get("editable").join().asBoolean(true));
+            for (BindingAttr attr : new BindingAttrs(element.getAttributes(), vm)) {
+                setAttribute(attr);
+            }
+
             tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        } else {
+            for (BindingAttr attr : new BindingAttrs(element.getAttributes(), vm)) {
+                if ("items".equals(attr.getBindingKey())) {
+                    setItems(attr);
+                    break;
+                }
+            }
         }
-
-        setItems(vm.get(element.getAttribute(":items")).join());
-
         return tableView;
     }
 
-    protected void setItems(JsonNode items) {
-        tableView.setItems(new ImmutableObservableJsonValue(items));
+    protected void setAttribute(BindingAttr attr) {
+        switch (attr.getBindingKey()) {
+            case "tableMenuButtonVisible": {
+                tableView.setTableMenuButtonVisible(attr.getBooleanValue(true));
+                break;
+            }
+            case "editable": {
+                tableView.setEditable(attr.getBooleanValue(true));
+                break;
+            }
+            case "items": {
+                setItems(attr);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+
+    protected void setItems(BindingAttr attr) {
+        tableView.setItems(new ImmutableObservableJsonValue(attr.getBindingValue().join()));
     }
 
     protected TableColumn<JsonNode, ?> applyTableColumn(Element element, ViewModel vm) {

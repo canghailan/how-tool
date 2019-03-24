@@ -1,8 +1,9 @@
 package cc.whohow.tool;
 
-import cc.whohow.tool.docker.conf.DockerConfiguration;
-import cc.whohow.tool.docker.view.DockerContainersView;
-import cc.whohow.tool.docker.vm.DockerViewModel;
+import cc.whohow.tool.conf.ConfigurationHandler;
+import cc.whohow.tool.conf.ConfigurationHandlerFactory;
+import cc.whohow.tool.docker.conf.DockerConfigurationHandler;
+import cc.whohow.tool.engine.CloseRunnable;
 import cc.whohow.tool.engine.ViewModel;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
@@ -15,13 +16,12 @@ import javafx.stage.WindowEvent;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Log4j2
 public class App extends Application {
     private TabPane tabPane = new TabPane();
-    private List<ViewModel<?>> vms = new ArrayList<>();
+    private ConfigurationHandlerFactory configurationHandlerFactory = new ConfigurationHandlerFactory(
+            new DockerConfigurationHandler()
+    );
 
     public static void main(String[] args) {
         launch();
@@ -32,14 +32,17 @@ public class App extends Application {
     public void start(Stage stage) {
         String path = "private/dev.docker.hot";
 
-        DockerViewModel vm = new DockerViewModel();
-        vm.setValue(new DockerConfiguration().read(path));
-        vm.setComponent(new DockerContainersView());
-        vms.add(vm);
+        ConfigurationHandler configurationHandler = configurationHandlerFactory.apply(path);
+        if (configurationHandler == null) {
+            throw new IllegalArgumentException(path);
+        }
+
+        ViewModel<?> vm = configurationHandler.getIndexViewModel(path);
 
         Tab tab = new Tab();
-        tab.setText(path);
+        tab.setText(getTabText(path));
         tab.setContent(vm.get());
+        tab.setOnCloseRequest(new CloseRunnable<>(vm));
 
         tabPane.getTabs().add(tab);
 
@@ -52,11 +55,16 @@ public class App extends Application {
     }
 
     private void onClose(WindowEvent e) {
-        for (ViewModel<?> vm : vms) {
-            try {
-                vm.close();
-            } catch (Throwable ignore) {
-            }
+        for (Tab tab : tabPane.getTabs()) {
+            tab.getOnCloseRequest().handle(e);
+        }
+    }
+
+    private String getTabText(String text) {
+        if (text.length() > 16) {
+            return "..." + text.substring(text.length() - 16 - 1, text.length() - 4);
+        } else {
+            return text.substring(0, text.length() - 4);
         }
     }
 }

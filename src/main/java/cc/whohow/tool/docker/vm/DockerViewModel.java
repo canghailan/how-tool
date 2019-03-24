@@ -47,6 +47,9 @@ public class DockerViewModel extends SimpleViewModel<Parent> {
         return CompletableFuture
                 .supplyAsync(() -> Json.from(docker.listContainersCmd().exec()))
                 .thenApply((value) -> {
+                    synchronized (DockerViewModel.this) {
+                        model.set("containers", value);
+                    }
                     log.debug("{}", value);
                     return value;
                 });

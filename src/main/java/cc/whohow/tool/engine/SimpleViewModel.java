@@ -7,6 +7,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Parent;
 import javafx.stage.WindowEvent;
+import org.w3c.dom.Element;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -14,6 +15,7 @@ import java.util.function.Function;
 
 public class SimpleViewModel<V extends Parent> implements ViewModel<V> {
     protected Component<V> component;
+    protected Element node;
     protected ObjectNode model;
     protected V view;
 
@@ -25,6 +27,14 @@ public class SimpleViewModel<V extends Parent> implements ViewModel<V> {
     @Override
     public void setComponent(Component<V> component) {
         this.component = component;
+    }
+
+    public Element getNode() {
+        return node;
+    }
+
+    public void setNode(Element node) {
+        this.node = node;
     }
 
     @Override
@@ -64,7 +74,7 @@ public class SimpleViewModel<V extends Parent> implements ViewModel<V> {
 
     @Override
     public ObjectNode getValue() {
-        return null;
+        return model;
     }
 
     @Override
@@ -86,7 +96,7 @@ public class SimpleViewModel<V extends Parent> implements ViewModel<V> {
     @Override
     public V get() {
         if (view == null) {
-            view = component.apply(null, this);
+            view = component.apply(node, this);
         }
         return view;
     }

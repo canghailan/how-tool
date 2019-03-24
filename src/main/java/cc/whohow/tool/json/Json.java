@@ -3,6 +3,7 @@ package cc.whohow.tool.json;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 import lombok.SneakyThrows;
@@ -23,6 +24,10 @@ public class Json {
 
     public static ObjectNode newObject() {
         return OBJECT_MAPPER.createObjectNode();
+    }
+
+    public static JsonNode string(String string) {
+        return JsonNodeFactory.instance.textNode(string);
     }
 
     @SneakyThrows
