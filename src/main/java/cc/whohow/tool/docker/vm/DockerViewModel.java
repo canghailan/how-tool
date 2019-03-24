@@ -2,6 +2,7 @@ package cc.whohow.tool.docker.vm;
 
 import cc.whohow.tool.engine.SimpleViewModel;
 import cc.whohow.tool.json.Json;
+import cc.whohow.tool.time.DateTime;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.dockerjava.api.DockerClient;
@@ -47,6 +48,10 @@ public class DockerViewModel extends SimpleViewModel<Parent> {
         return CompletableFuture
                 .supplyAsync(() -> Json.from(docker.listContainersCmd().exec()))
                 .thenApply((value) -> {
+                    for (JsonNode node : value) {
+                        ObjectNode object = (ObjectNode) node;
+                        object.put("CreateTime", DateTime.ofEpochSecond(object.path("Created").asLong()).toString());
+                    }
                     synchronized (DockerViewModel.this) {
                         model.set("containers", value);
                     }

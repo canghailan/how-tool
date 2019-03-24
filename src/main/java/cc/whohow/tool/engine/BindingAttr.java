@@ -19,12 +19,13 @@ public class BindingAttr implements Map.Entry<String, String> {
         this.attr = attr;
         this.vm = vm;
         String name = attr.getName();
-        if (name.startsWith(":")) {
-            prefix = ":";
-            bindingKey = name.substring(prefix.length());
-        } else {
+        int index = name.indexOf(':');
+        if (index < 0) {
             prefix = null;
             bindingKey = name;
+        } else {
+            prefix = name.substring(0, index + 1);
+            bindingKey = name.substring(index + 1);
         }
     }
 
