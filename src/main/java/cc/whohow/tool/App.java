@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 @Log4j2
 public class App extends Application {
-    private static final Pattern TAB_TITLE = Pattern.compile("(?<title>.{1,17})(\\.hot)?$");
+    private static final Pattern TAB_TEXT = Pattern.compile("(?<short>.{1,17})(\\.hot)?$");
     private TabPane tabPane = new TabPane();
     private ConfigurationHandlerFactory configurationHandlerFactory = new ConfigurationHandlerFactory(
             new DockerConfigurationHandler()
@@ -60,26 +60,26 @@ public class App extends Application {
 
         ViewModel<?> vm = configurationHandler.getIndexViewModel(uri);
 
-        String title = uri;
-        if (title.length() > 16) {
-            Matcher matcher = TAB_TITLE.matcher(title);
+        String tabText = uri;
+        if (tabText.length() > 16) {
+            Matcher matcher = TAB_TEXT.matcher(tabText);
             if (matcher.find()) {
-                title = matcher.group("title");
+                tabText = matcher.group("short");
             }
-            if (title.length() > 16) {
-                title = "..." + title.substring(4);
+            if (tabText.length() > 16) {
+                tabText = "..." + tabText.substring(4);
             }
         }
 
         ObjectNode options = Json.newObject();
-        options.put("title", title);
+        options.put("text", tabText);
 
         open(vm, options);
     }
 
     private void open(ViewModel<?> vm, ObjectNode options) {
         Tab tab = new Tab();
-        tab.setText(options.path("title").asText(vm.getClass().toString()));
+        tab.setText(options.path("text").asText(vm.getClass().toString()));
         tab.setContent(vm.get());
         tab.setOnCloseRequest(new CloseRunnable<>(vm));
 
