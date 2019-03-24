@@ -2,6 +2,7 @@ package cc.whohow.tool.engine;
 
 import cc.whohow.tool.engine.component.ButtonComponent;
 import cc.whohow.tool.engine.component.GroupComponent;
+import cc.whohow.tool.engine.component.HBoxComponent;
 import cc.whohow.tool.engine.component.TableViewComponent;
 import javafx.scene.Parent;
 
@@ -27,9 +28,10 @@ public class Components implements Function<String, Component<? extends Parent>>
 
     private static Map<String, Supplier<? extends Component<? extends Parent>>> defaultComponents() {
         Map<String, Supplier<? extends Component<? extends Parent>>> components = new HashMap<>();
-        components.put("TableView", TableViewComponent::new);
+        components.put("HBox", HBoxComponent::new);
         components.put("Group", GroupComponent::new);
         components.put("Button", ButtonComponent::new);
+        components.put("TableView", TableViewComponent::new);
         return Collections.unmodifiableMap(components);
     }
 

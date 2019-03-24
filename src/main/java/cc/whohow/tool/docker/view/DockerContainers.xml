@@ -2,16 +2,16 @@
 <app>
     <template>
         <TableView :items="containers">
-            <TableColumn text="ID" cellValue="Id"/>
-            <TableColumn text="Image" cellValue="Image"/>
-            <TableColumn text="Created" cellValue="Created"/>
+            <TableColumn text="容器ID" cellValue="Id"/>
+            <TableColumn text="镜像" cellValue="Image"/>
+            <TableColumn text="创建时间" cellValue="Created"/>
             <TableColumn text="State" cellValue="State"/>
             <TableColumn text="Status" cellValue="Status"/>
-            <TableColumn text="Action">
-                <Group>
-                    <Button text="打开" />
-                    <Button text="关闭" />
-                </Group>
+            <TableColumn text="操作">
+                <HBox>
+                    <Button text="打开"/>
+                    <Button text="关闭"/>
+                </HBox>
             </TableColumn>
         </TableView>
     </template>

@@ -2,7 +2,8 @@ package cc.whohow.tool;
 
 import cc.whohow.tool.docker.conf.DockerConfiguration;
 import cc.whohow.tool.docker.view.DockerContainersView;
-import cc.whohow.tool.engine.Component;
+import cc.whohow.tool.docker.vm.DockerViewModel;
+import cc.whohow.tool.engine.ViewModel;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -19,24 +20,26 @@ import java.util.List;
 
 @Log4j2
 public class App extends Application {
+    private TabPane tabPane = new TabPane();
+    private List<ViewModel<?>> vms = new ArrayList<>();
+
     public static void main(String[] args) {
         launch();
     }
-
-    private TabPane tabPane = new TabPane();
-    private List<Component<?>> componentList = new ArrayList<>();
 
     @Override
     @SneakyThrows
     public void start(Stage stage) {
         String path = "private/dev.docker.hot";
-        DockerContainersView dockerComponent = new DockerContainersView();
-        dockerComponent.setValue(new DockerConfiguration().read(path));
-        componentList.add(dockerComponent);
+
+        DockerViewModel vm = new DockerViewModel();
+        vm.setValue(new DockerConfiguration().read(path));
+        vm.setComponent(new DockerContainersView());
+        vms.add(vm);
 
         Tab tab = new Tab();
         tab.setText(path);
-        tab.setContent(dockerComponent.get());
+        tab.setContent(vm.get());
 
         tabPane.getTabs().add(tab);
 
@@ -49,9 +52,9 @@ public class App extends Application {
     }
 
     private void onClose(WindowEvent e) {
-        for (Component<?> component : componentList) {
+        for (ViewModel<?> vm : vms) {
             try {
-                component.close();
+                vm.close();
             } catch (Throwable ignore) {
             }
         }
